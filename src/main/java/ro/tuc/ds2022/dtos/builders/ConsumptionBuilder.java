@@ -23,6 +23,10 @@ public class ConsumptionBuilder {
         return new ConsumptionDto(consumption.getId(), consumption.getDevice().getId(), consumption.getTimestamp(), consumption.getValue());
     }
 
+    public static ConsumptionDto toConsumptionDtoHour(ConsumptionDto consumption){
+        return new ConsumptionDto(consumption.getId(), consumption.getDeviceId(), consumption.getTimestamp().getHours(), consumption.getValue());
+    }
+
     public static Consumption toEntity(ConsumptionDto consumptionDto) {
         Device device = deviceRepository.findById(consumptionDto.getDeviceId())
                 .orElseThrow(() -> new ObjenesisException(String.valueOf(consumptionDto.getDeviceId())));

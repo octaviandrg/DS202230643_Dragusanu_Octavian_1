@@ -37,6 +37,12 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
+    @GetMapping("/username/{id}")
+    public ResponseEntity<?> getUserByUsername(@PathVariable(name = "id") String username) throws Exception {
+        UserDto userDto = userService.getUserByUsername(username);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUser(@PathVariable(name = "id") Long userId,
                                           @Valid @RequestBody UserDto userDto){

@@ -29,9 +29,16 @@ public class UserDto {
 
         this.username = username;
         this.password = password;
-        this.authorities = AuthorityUtils.createAuthorityList(String.valueOf(authorities));
+        this.role = getRoleFromAuthorities(authorities.toString());
     }
 
+
+    public Role  getRoleFromAuthorities(String authorities) {
+        if (authorities.equals("[ADMIN]")) {
+            return Role.ADMIN;
+        }
+        return Role.REGULAR;
+    }
     public Role getRole() {
         return role;
     }
@@ -42,6 +49,13 @@ public class UserDto {
 
     public UserDto(Long id, String username, String password, Role role) {
         this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    public UserDto(String username, String password, Role role) {
+
         this.username = username;
         this.password = password;
         this.role = role;

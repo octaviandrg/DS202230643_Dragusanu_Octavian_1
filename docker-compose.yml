@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  demo-db:
+    image: postgres:14
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root"]
+      timeout: 45s
+      interval: 10s
+      retries: 5
+    restart: always
+    volumes:
+      - './sql:/docker-entrypoint-initdb.d'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=online-energy-utility-platform
+    ports:
+      - "5432:5432"
+    container_name: demo-db
+  demo-be:
+    build: .
+    restart: always
+    environment:
+      - DB_PASSWORD=123465
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_NAME=online-energy-utility-platform
+      - DB_HOST=localhost
+    ports:
+      - "8080:8080"
+    depends_on:
+      demo-db:
+        condition: service_healthy

@@ -35,6 +35,11 @@ public class DeviceController {
         return new ResponseEntity<>("Device found!\n" + deviceDto, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/byUsername/{username}")
+    public ResponseEntity<?> getDeviceByUsername(@PathVariable(name = "username") String username) throws Exception {
+        return new ResponseEntity<>(deviceService.getDevicesByUsername(username), HttpStatus.OK);
+    }
+
     @CrossOrigin(origins = "http://localhost:8080")
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<?> updateDevice(@PathVariable(name = "id") long deviceId,

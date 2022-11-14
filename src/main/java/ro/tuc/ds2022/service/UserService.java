@@ -47,12 +47,19 @@ public class UserService implements UserDetailsService {
 
     }
 
+
+
     private SimpleGrantedAuthority mapRoleToAuthorities(Role role){
         return new SimpleGrantedAuthority(String.valueOf(role));
     }
 
     public List<UserDto> getAllUsers(){
         return userRepository.findAll().stream().map(UserBuilder::toUserDto).collect(Collectors.toList());
+    }
+
+    public UserDto getUserByUsername(String username){
+        User user = userRepository.findByUsername(username);
+        return new UserDto(user.getUsername(), user.getPassword(), user.getRole());
     }
 
     public Long createUser(UserDto userDto){

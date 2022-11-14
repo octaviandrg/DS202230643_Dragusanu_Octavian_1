@@ -28,6 +28,15 @@ public class DeviceService {
         return deviceRepository.findAll().stream().map(DeviceBuilder::toDeviceDto).collect(Collectors.toList());
     }
 
+    public List<DeviceDto> getDevicesByUserId(Long userId){
+        return deviceRepository.findAllByUserId(userId).stream().map(DeviceBuilder::toDeviceDto).collect(Collectors.toList());
+    }
+
+    public List<DeviceDto> getDevicesByUsername(String username){
+        Long userId = userRepository.findByUsername(username).getId();
+        return deviceRepository.findAllByUserId(userId).stream().map(DeviceBuilder::toDeviceDto).collect(Collectors.toList());
+    }
+
     public Long createDevice(DeviceDto deviceDto){
         Device device = DeviceBuilder.toEntity(deviceDto);
         return deviceRepository.save(device).getId();

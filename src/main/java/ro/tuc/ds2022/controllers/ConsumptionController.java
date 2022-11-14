@@ -9,6 +9,7 @@ import ro.tuc.ds2022.dtos.ConsumptionDto;
 import ro.tuc.ds2022.service.ConsumptionService;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 
 @RestController
 @CrossOrigin
@@ -29,10 +30,20 @@ public class ConsumptionController {
         return new ResponseEntity<>("Consumption created with id " + idClient, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getConsumptionByDeviceId(@PathVariable(name = "id") Long deviceId) throws Exception {
-        return new ResponseEntity<>(consumptionService.getConsumptionsByDeviceId(deviceId), HttpStatus.OK);
+    @CrossOrigin(origins = "http://localhost:8080")
+    @GetMapping("/deviceId/{id}/{d}/{m}/{y}")
+    public ResponseEntity<?> getConsumptionsByDeviceId(@PathVariable(name = "id") Long deviceId,
+                                                       @PathVariable(name = "d") int day,
+                                                       @PathVariable(name = "m") int month,
+                                                       @PathVariable(name = "y") int year ) throws Exception {
+        LocalDate date = LocalDate.of(year, month, day);
+        return new ResponseEntity<>(consumptionService.getConsumptionsByDeviceId(deviceId, date), HttpStatus.OK);
     }
+
+//    @GetMapping("/{username}")
+//    public ResponseEntity<?> getConsumptionsByUsername(@PathVariable(name = "username") String username) throws Exception {
+//        return new ResponseEntity<>(consumptionService.getConsumptionsByUsername(username), HttpStatus.OK);
+//    }
 
 //    @PutMapping("/update/{id}")
 //    public ResponseEntity<?> updateConsumption(@PathVariable(name = "id") Long clientId,
