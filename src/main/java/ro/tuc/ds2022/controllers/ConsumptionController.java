@@ -52,11 +52,13 @@ public class ConsumptionController {
 //        return new ResponseEntity<>(updatedClient, HttpStatus.OK);
 //    }
 //
-//    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity<?> deleteConsumption(@PathVariable(name = "id") Long clientId){
-//        consumptionService.deleteClient(clientId);
-//        return new ResponseEntity<>("Client deleted!", HttpStatus.OK);
-//    }
+
+    @CrossOrigin(origins = "http://localhost:8080")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteConsumption(@PathVariable(name = "id") Long consumptionId){
+        consumptionService.deleteConsumption(consumptionId);
+        return new ResponseEntity<>("consumption deleted!", HttpStatus.OK);
+    }
 
 
 

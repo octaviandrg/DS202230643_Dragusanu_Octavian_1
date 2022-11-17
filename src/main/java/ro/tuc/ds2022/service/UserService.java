@@ -2,23 +2,18 @@ package ro.tuc.ds2022.service;
 
 import org.elasticsearch.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ro.tuc.ds2022.dtos.ClientDto;
 import ro.tuc.ds2022.dtos.UserDto;
-import ro.tuc.ds2022.dtos.builders.ClientBuilder;
 import ro.tuc.ds2022.dtos.builders.UserBuilder;
-import ro.tuc.ds2022.entities.Client;
 import ro.tuc.ds2022.entities.Role;
 import ro.tuc.ds2022.entities.User;
 import ro.tuc.ds2022.repositories.UserRepository;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -27,10 +22,15 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
+    //@Autowired
     private UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
 
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     private boolean usernameExist(String username){
@@ -63,7 +63,7 @@ public class UserService implements UserDetailsService {
     }
 
     public Long createUser(UserDto userDto){
-        User user = new User(userDto.getUsername(), userDto.getPassword(), userDto.getRole());
+        User user = new User(userDto.getUsername(), passwordEncoder.encode(userDto.getPassword()), userDto.getRole());
         return userRepository.save(user).getId();
     }
 
@@ -71,11 +71,11 @@ public class UserService implements UserDetailsService {
     public UserDto updateUser(Long userId, UserDto userDto){
         User user = userRepository.findById(userId).orElseThrow(() ->  new ResourceNotFoundException("User", "id", userId));
         user.setUsername(userDto.getUsername());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setRole(userDto.getRole());
 
         User updatedUser = userRepository.save(user);
-        return new UserDto(updatedUser.getId(), updatedUser.getUsername(), updatedUser.getPassword(), updatedUser.getRole());
+        return new UserDto(updatedUser.getId(), updatedUser.getUsername(), passwordEncoder.encode(updatedUser.getPassword()), updatedUser.getRole());
     }
 
     public UserDto getUserById(Long id) throws Exception {

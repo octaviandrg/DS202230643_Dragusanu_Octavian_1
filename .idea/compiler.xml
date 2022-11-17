@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="demo" />
+        <module name="DS202230643_Dragusanu_Octavian_1_Backend" />
         <module name="DS202230643_Dragusanu_Octavian_1" />
       </profile>
     </annotationProcessing>
@@ -15,6 +16,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="DS202230643_Dragusanu_Octavian_1" options="-parameters" />
+      <module name="DS202230643_Dragusanu_Octavian_1_Backend" options="-parameters" />
       <module name="demo" options="-parameters" />
     </option>
   </component>

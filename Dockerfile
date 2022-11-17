@@ -1,14 +1,11 @@
-FROM openjdk:11
+FROM maven:3.6.3-jdk-11 AS build-project
+ADD . ./docker-spring-boot
+WORKDIR /docker-spring-boot
+RUN mvn clean install
 
-WORKDIR /app
 
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
+FROM openjdk:11.0.6-jre
+EXPOSE 8080
 
-RUN ./mvnw clean
-RUN ./mvnw dependency:resolve
-
-COPY src ./src
-RUN ./mvnw package
-
-CMD ["./mvnw", "spring-boot:run"]
+COPY --from=build-project /docker-spring-boot/target/blog-api-docker.jar ./docker-spring-boot.jar
+CMD ["java", "-jar", "docker-spring-boot.jar"]
